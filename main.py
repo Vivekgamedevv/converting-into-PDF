@@ -1,49 +1,29 @@
-# used for conversion of HTML file into pdf file
-from weasyprint import HTML
-# used for conversion of DOCX file into pdf file
-import subprocess
-import os
+import pypandoc
 
-def convert_docx_to_pdf():
-    docxfile = input("Enter the DOCX file: ")
+# Convert DOCX to PDF
+def convert_docx_to_pdf(input_file, output_file):
     try:
-        if not os.path.isfile(docxfile):
-            raise FileNotFoundError(f"The file {docxfile} does not exist.")
-        
-        # Use unoconv to convert DOCX to PDF
-        subprocess.run(["libreoffice", "--headless", "--convert-to", "pdf", docxfile], check=True)        
-        output_pdf = docxfile.replace(".docx", ".pdf")
-        print(f"PDF successfully created: {output_pdf}")
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred during conversion: {e}")
+        output = pypandoc.convert_file(input_file, 'pdf', outputfile=output_file)
+        print(f"Conversion successful! PDF saved to: {output_file}")
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"Error during conversion: {e}")
 
-
-
-
-def convert_html_to_pdf():
-    htmlfile = input("Enter the HTML file: ")
+# Convert HTML to PDF
+def convert_html_to_pdf(input_file, output_file):
     try:
-        if not os.path.isfile(htmlfile):
-            raise FileNotFoundError(f"The file {htmlfile} does not exist.")
-        HTML(htmlfile).write_pdf('output.pdf')
-        print("PDF successfully created: output.pdf")
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
+        output = pypandoc.convert_file(input_file, 'pdf', outputfile=output_file)
+        print(f"Conversion successful! PDF saved to: {output_file}")
+    except Exception as e:
+        print(f"Error during conversion: {e}")
 
-
-print("1.HTML code to pdf convertor")
-print("2.DOCX file to pdf convertor")
-choice = input("Select the options:")
-
+print("1.ENTER 1 FOR DOCX TO PDF")
+print("2.ENTER 2 FOR HTML TO PDF")
+choice = input("")
 if choice == "1":
-    convert_html_to_pdf()
+    docx_name = input("Enter the docx filename:")
+    convert_docx_to_pdf(docx_name, 'output_docx_to_pdf.pdf')
 elif choice == "2":
-     convert_docx_to_pdf()
+    pdf_name = input("Enter the HTML filename: ")
+    convert_html_to_pdf(pdf_name, 'output_html_to_pdf.pdf')
 else:
-    print("Entered the wrong choice")
-    print("TRY AGAIN!!!")
-
+    print("Wrong Input")
